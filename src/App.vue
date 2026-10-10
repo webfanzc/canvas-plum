@@ -110,10 +110,13 @@ function runFrame() {
 }
 
 function init(branchCount: number, length = 40) {
-  new Array(branchCount).fill(0).forEach(() => {
-    step(new Line(new Point(WIDTH / (Math.random() * 2), HEIGHT), length, -Math.PI / (Math.random() * 2 * Math.PI)))
+  // 底部居中、角度 -90°±0.2 散开：随机起点/随机角度经常横着飞出画布，
+  // 作为展柜 demo 需要稳定长出「树形」
+  new Array(branchCount).fill(0).forEach((_, i) => {
+    const offset = (i - (branchCount - 1) / 2) * 24
+    const theta = -Math.PI / 2 + (Math.random() - 0.5) * 0.4
+    step(new Line(new Point(WIDTH / 2 + offset, HEIGHT), length, theta))
   })
-  // step(new Line(new Point(WIDTH / 2, HEIGHT), 40, -Math.PI / 2))
 
   runFrame()
 }
