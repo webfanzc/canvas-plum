@@ -13,17 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 6.32.3
-
-      # pnpm 6（JS 版）在 node ≥20.12 的 URLSearchParams 品牌检查下会直接崩，
-      # 钉 20.11.1；vite 2 构建在该版本验证过
+      # pnpm 6 的 JS 版在 node ≥20.12 的 URLSearchParams 品牌检查下崩溃；
+      # 用 @pnpm/exe standalone（自带 node 运行时，与 host node 解耦）
       - name: Use Node.js 20.11.1
         uses: actions/setup-node@v4
         with:
           node-version: 20.11.1
+
+      - name: Setup pnpm 6 standalone
+        run: npm install -g @pnpm/exe@6.32.3
 
       # cypress 只是 e2e 壳，构建不需要其二进制（下载又大又慢）
       - name: Install dependencies
