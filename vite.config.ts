@@ -9,6 +9,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 
 export default defineConfig({
+  // 部署在博客 /demos/plum/ 子路径下
+  base: '/demos/plum/',
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
