@@ -18,10 +18,12 @@ jobs:
         with:
           version: 6.32.3
 
-      - name: Use Node.js 24
+      # pnpm 6（JS 版）在 node ≥20.12 的 URLSearchParams 品牌检查下会直接崩，
+      # 钉 20.11.1；vite 2 构建在该版本验证过
+      - name: Use Node.js 20.11.1
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20.11.1
 
       # cypress 只是 e2e 壳，构建不需要其二进制（下载又大又慢）
       - name: Install dependencies
