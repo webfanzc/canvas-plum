@@ -1,5 +1,7 @@
 <template>
-  <canvas ref="plum" :width="WIDTH" :height="HEIGHT" border="~ solid black" />
+  <div class="stage" :class="{ dark }">
+    <canvas ref="plum" :width="WIDTH" :height="HEIGHT" />
+  </div>
 </template>
 <script setup lang="ts">
 import type { Nullable } from 'vitest'
@@ -50,7 +52,7 @@ class Line {
     return this.end
   }
 
-  draw(ctx: CanvasRenderingContext2D, color = '#000') {
+  draw(ctx: CanvasRenderingContext2D, color = branchColor) {
     this.lineTo(ctx, this.getEndPoint(), color)
   }
 }
@@ -72,6 +74,12 @@ class TaskQueue {
     tasks.forEach(task => task())
   }
 }
+
+const themeParam = new URLSearchParams(location.search).get('theme')
+const dark = themeParam
+  ? themeParam === 'dark'
+  : window.matchMedia('(prefers-color-scheme: dark)').matches
+const branchColor = dark ? '#ededed' : '#000'
 
 const plum = $ref<Nullable<HTMLCanvasElement>>()
 const ctx = $computed(() => plum!.getContext('2d')!)
@@ -126,7 +134,24 @@ onMounted(() => {
 })
 </script>
 <style scoped lang="scss">
+.stage {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  &.dark {
+    background: #0a0a0a;
+    canvas {
+      border-color: #333;
+    }
+  }
+}
 canvas {
-  margin: 50px;
+  width: min(88vmin, 880px);
+  height: min(88vmin, 880px);
+  border: 1px solid #000;
 }
 </style>
